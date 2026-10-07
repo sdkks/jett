@@ -1,12 +1,14 @@
 # jett
 
-> jettison the junk — a terminal disk space navigator and reclaimer
+**jettison the junk — a terminal disk space navigator and reclaimer**
 
 ## How does it work?
 
 Given a path on your hard-drive (which could also be the root path, eg. `/`), `jett` scans it and indexes its metadata to memory so that you could explore its contents (even while still scanning!).
 
 Once completed, you can navigate through subfolders, getting a visual treemap representation of what's taking up your disk space. You can even delete files or folders and `jett` will track how much space you've freed up in this session.
+
+If you run it in `dry-run` mode, you will be able to get a list of items that would have been otherwise deleted. Great for relocating them to your backup destination or compressing them if applicable.
 
 ## Installation
 
