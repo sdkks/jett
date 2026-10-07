@@ -49,7 +49,9 @@ cargo install --path .
 
 ## Supported platforms
 
-`jett` targets linux, macos and windows.
+`jett` builds and runs on Linux, macOS, and Windows. Prebuilt release binaries are
+published for Linux (glibc and fully static musl) and macOS, x86_64 and aarch64;
+on Windows, install from source — that port is untested.
 
 ## Usage
 
@@ -59,10 +61,26 @@ Either start `jett` in the folder you want to scan, or provide it with the folde
 $ jett /home/user
 ```
 
-Add `-x`/`--one-file-system` to stay on a single filesystem, like `du -x`:
+### Command line options
+
+| Option | Effect |
+|---|---|
+| `[folder]` | Folder to scan; defaults to the current directory |
+| `-a`, `--apparent-size` | Show apparent file sizes instead of block usage on disk |
+| `-x`, `--one-file-system` | Stay on one filesystem like `du -x` (Unix; no-op on Windows) |
+| `--dry-run` | Plan deletions without removing files (see below) |
+| `--file-list-delim <d>` | Delimiter for the dry-run list; requires `--dry-run` |
+| `--disable-delete-confirmation` | Delete without prompting — know what you are doing |
+| `--theme <name>` | Color scheme for this session only |
+| `config set` / `config validate` | Manage the config file without starting the navigator |
+
+Run `jett --help` for the authoritative list.
+
+`-x`/`--one-file-system` keeps the scan on a single filesystem, like `du -x`:
 directories mounted from another device still appear as tiles, but their
 contents are not scanned or counted. Symlinks are never followed either way.
-(Unix only; the flag is a no-op on Windows.)
+On macOS, `/System/Volumes/Data` is a separate device from the sealed system
+volume, so `jett -x /` stays on the system volume only.
 
 Choose a color scheme with `--theme <name>` (for example, `--theme catppuccin-mocha`
 or `--theme solarized-light`). Run `jett --help` for the complete list of 19 built-in
@@ -78,8 +96,9 @@ and `q` to quit. Deletion requires confirmation unless explicitly disabled.
 Press `o` to open the folder containing the selected item in your system's file
 manager (Finder, your Linux desktop's file manager, or Explorer), and `y` to copy
 the selected item's absolute path to the clipboard (`pbcopy`, `wl-copy`, `xclip`,
-`xsel`, or `clip`). On machines without a clipboard tool, `y` reports what is
-missing instead of copying.
+`xsel`, or `clip`). Both confirm with a brief on-screen notice that dismisses
+itself after two seconds; any key also clears it. On machines without a
+clipboard tool, `y` reports what is missing instead of copying.
 After scanning finishes, press `t` to open the full-screen theme selector.
 
 Type to filter built-in and custom scheme names; Up/Down previews the highlighted
