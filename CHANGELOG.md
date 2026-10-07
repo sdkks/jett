@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 
 ### Added
+* Add static musl builds for Linux (x86_64 and aarch64) so prebuilt binaries run on systems regardless of their glibc version, such as NAS firmware and older distributions
 * Add `make release` to bump, commit, and tag a release in one step (pushing stays manual)
 * Publish prebuilt binaries for Linux and macOS (x86_64 and aarch64) on every tagged release, installable with `cargo binstall jett` or as `.tar.gz` downloads from the releases page
 * Add `--dry-run` cleanup planning with unchanged confirmation and accounting, explicit dry-run prompts, an exit summary, and a sorted, deduplicated absolute-path list created by `mktemp`

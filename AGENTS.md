@@ -90,7 +90,8 @@ an explicit, written justification in the Makefile comment.
   pushes and refuses to run over unrelated tracked changes). Review the
   diff, commit, tag `vX.Y.Z`. `bump-version` itself never commits or tags.
 - Pushing the tag runs the release workflow: it uploads prebuilt
-  `jett-<target>.tar.gz` assets (Linux/macOS, x86_64/aarch64) matching
+  `jett-<target>.tar.gz` assets — Linux gnu plus fully static musl builds,
+  and macOS, x86_64/aarch64 — matching
   `[package.metadata.binstall]`, so `cargo binstall jett` works. Publishing
   to crates.io is a separate, local `cargo publish --locked` (registry
   credentials never live in CI).

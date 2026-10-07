@@ -24,6 +24,8 @@ cargo binstall jett
 
 Or download the `.tar.gz` archive for your platform — Linux and macOS, x86_64 and aarch64 — from the [releases](https://github.com/sdkks/jett/releases) page and put the `jett` binary on your `PATH`.
 
+On Linux systems with an old glibc (NAS devices, older distributions) that reject the standard builds with errors like ``GLIBC_2.xx not found``, use the fully static `musl` builds instead: `cargo binstall --target x86_64-unknown-linux-musl jett` or grab the `musl` archive from the releases page.
+
 ### From source
 
 ```

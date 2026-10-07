@@ -47,7 +47,8 @@ Two steps complete the release after tagging:
 
 1. `git push origin vX.Y.Z` triggers `.github/workflows/release.yml`, which
    creates the GitHub Release from `CHANGELOG.md` and uploads prebuilt
-   `jett-<target>.tar.gz` binaries (Linux and macOS, x86_64/aarch64). Asset
+   `jett-<target>.tar.gz` binaries (Linux gnu plus fully static musl, and
+   macOS; x86_64/aarch64). Asset
    names and layout must keep matching `[package.metadata.binstall]` in
    `Cargo.toml` — that is what makes `cargo binstall jett` work.
 2. Once the workflow's assets are uploaded, publish the crate from the
