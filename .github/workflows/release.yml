@@ -1,0 +1,58 @@
+# Release pipeline: pushing a vX.Y.Z tag creates the GitHub Release from
+# CHANGELOG.md and uploads prebuilt jett-<target>.tar.gz binaries (Linux and
+# macOS, x86_64/aarch64) with the binary at the archive root — the exact
+# layout [package.metadata.binstall] in Cargo.toml declares, so
+# `cargo binstall jett` can find and install them. Publishing the crate to
+# crates.io is a deliberate local maintainer step; no registry credentials
+# live in GitHub.
+name: Release
+
+permissions:
+  contents: read
+
+on:
+  push:
+    tags:
+      - v[0-9]+.*
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # for taiki-e/create-gh-release-action
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: taiki-e/create-gh-release-action@v1
+        with:
+          changelog: CHANGELOG.md
+
+  upload-assets:
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+          - target: x86_64-apple-darwin
+            os: macos-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # for taiki-e/upload-rust-binary-action
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          # (required) binary name; the asset is named jett-<target>.tar.gz
+          bin: jett
+          target: ${{ matrix.target }}
+          locked: true
+          include: LICENSE,README.md
+          checksum: sha256

@@ -14,7 +14,17 @@ If you run it in `dry-run` mode, you will be able to get a list of items that wo
 
 ## Installation
 
-### From source (the only supported way right now)
+### Prebuilt binaries (recommended)
+
+With [cargo-binstall](https://github.com/cargo-bins/cargo-binstall):
+
+```
+cargo binstall jett
+```
+
+Or download the `.tar.gz` archive for your platform — Linux and macOS, x86_64 and aarch64 — from the [releases](https://github.com/sdkks/jett/releases) page and put the `jett` binary on your `PATH`.
+
+### From source
 
 ```
 cargo install --git https://github.com/sdkks/jett
@@ -25,10 +35,6 @@ or, from a local clone:
 ```
 cargo install --path .
 ```
-
-### Prebuilt binaries
-
-Once the modernization is complete, prebuilt binaries will be published in the ["releases"](https://github.com/sdkks/jett/releases) of this repository.
 
 ## Supported platforms
 

@@ -37,3 +37,16 @@ Podman container, renames `[Unreleased]` to `[x.y.z] - <today>`, inserts a
 fresh `[Unreleased]` above it, and fills an empty section with a default
 "Bumped version" bullet. Review the diff, commit, then tag with
 `git tag vX.Y.Z`. Never rewrite or reorder historical release sections.
+
+Two steps complete the release after tagging:
+
+1. `git push origin vX.Y.Z` triggers `.github/workflows/release.yml`, which
+   creates the GitHub Release from `CHANGELOG.md` and uploads prebuilt
+   `jett-<target>.tar.gz` binaries (Linux and macOS, x86_64/aarch64). Asset
+   names and layout must keep matching `[package.metadata.binstall]` in
+   `Cargo.toml` — that is what makes `cargo binstall jett` work.
+2. Once the workflow's assets are uploaded, publish the crate from the
+   maintainer's machine with `cargo publish --locked` from the tagged
+   commit. Registry credentials intentionally never live in CI, and
+   `cargo binstall` resolves through crates.io, so the release is only
+   source-installable until this step lands.

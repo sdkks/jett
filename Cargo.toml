@@ -10,6 +10,15 @@ license = "MIT"
 edition = "2024"
 rust-version = "1.88"
 
+# Binary install metadata for cargo-binstall (https://github.com/cargo-bins/cargo-binstall).
+# .github/workflows/release.yml uploads jett-<target>.tar.gz assets with the binary
+# at the archive root, matching pkg-url/bin-dir below. The extension is hardcoded
+# because the action produces .tar.gz while { archive-suffix } expands to .tgz.
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }.tar.gz"
+bin-dir = "{ bin }{ binary-ext }"
+pkg-fmt = "tgz"
+
 [dependencies]
 anyhow = "1.0"
 clap = { version = "4.6", features = ["derive"] }

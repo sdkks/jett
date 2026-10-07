@@ -86,6 +86,11 @@ an explicit, written justification in the Makefile comment.
   BUMP=patch|minor|major` (or `VERSION=x.y.z`) updates `Cargo.toml`,
   refreshes `Cargo.lock` in the container, and stamps the changelog. Review
   the diff, commit, tag `vX.Y.Z`. The script never commits or tags.
+- Pushing the tag runs the release workflow: it uploads prebuilt
+  `jett-<target>.tar.gz` assets (Linux/macOS, x86_64/aarch64) matching
+  `[package.metadata.binstall]`, so `cargo binstall jett` works. Publishing
+  to crates.io is a separate, local `cargo publish --locked` (registry
+  credentials never live in CI).
 - Historical release sections are immutable; pre-jett history was
   removed by owner decision — do not resurrect it.
 
