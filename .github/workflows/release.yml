@@ -60,6 +60,10 @@ jobs:
           # (required) binary name; the asset is named jett-<target>.tar.gz
           bin: jett
           target: ${{ matrix.target }}
+          # Plain cargo for every target: rustc's musl targets are
+          # self-contained (no cross toolchain needed), and cross misdetects
+          # ARM runners as x86_64 hosts and fails.
+          build-tool: cargo
           locked: true
           include: LICENSE,README.md
           checksum: sha256
