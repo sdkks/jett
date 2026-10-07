@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-08
+
+
 ### Fixed
 * Build the static musl release binaries with cargo directly — the cross toolchain misdetects ARM runners as x86_64 hosts, so no musl binaries were published for 0.1.2
 

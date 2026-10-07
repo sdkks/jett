@@ -1,7 +1,7 @@
 [package]
 name = "jett"
 description = "Terminal disk space navigator — jettison the junk"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["sdkks <sdkks@users.noreply.github.com>"]
 readme = "README.md"
 homepage = "https://github.com/sdkks/jett"
