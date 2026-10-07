@@ -1,0 +1,54 @@
+---
+source: src/tests/cases/ui.rs
+expression: "&terminal_draw_events_mirror[0]"
+---
+ 2.4M | /tmp/jett_tests/small_files_with_x_as_zero
+┌────────────────────────────────────────────────┐
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                     file1                      │
+│                                                │
+│                                                │
+│                   1.0M (42%)                   │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+├────────────────────────────────────────────────┤
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                     file2                      │
+│                                                │
+│                   1.0M (42%)                   │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+│                                                │
+├────────────────────────────────────────────────┤
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+│xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx│
+└────────────────────────────────────────────────┘
+                                (x = Small files) 
+ ←↓↑→: navigate, ⌫: del, <t>: themes  DRY-RUN OFF

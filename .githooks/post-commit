@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+sha=$(git rev-parse --short=12 HEAD 2>/dev/null) || sha=unknown
+printf 'post-commit: %s committed\n' "$sha" >&2
+exit 0

@@ -1,0 +1,25 @@
+---
+source: src/app/theme_selector_tests.rs
+assertion_line: 303
+expression: screen(&mut app)
+---
+ Total: 12.0K (3 files), freed: 0 | /synthetic                                                      
+ Themes (live preview)                      ──────────────────────┬────────────────────────────────┐
+                                                                  │                                │
+ > default                                                        │                                │
+   dark                                                           │                                │
+   light                                                          │    folder/ (+1 descendants)    │
+   solarized-dark                                                 │           4.0K (33%)           │
+   solarized-light                                                │                                │
+   monokai                                                        │                                │
+   dracula                                                        │                                │
+   gruvbox-dark                                                   │                                │
+   gruvbox-light                                                  │ 1 items; % of folder           │
+   nord                                                           │ largest  [##############] 100% │
+   catppuccin-mocha                                               │                                │
+   catppuccin-macchiato                                           │                                │
+   catppuccin-frappe                                              │                                │
+   catppuccin-latte                                               │                                │
+   tokyo-night                              ──────────────────────┴────────────────────────────────┘
+ Filter: _                                                                                          
+ Up/Down: preview, Enter: save, Esc: cancel                                             DRY-RUN OFF

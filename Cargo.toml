@@ -1,0 +1,29 @@
+[package]
+name = "jett"
+description = "Terminal disk space navigator — jettison the junk"
+version = "0.1.0"
+authors = ["sdkks <sdkks@users.noreply.github.com>"]
+readme = "README.md"
+homepage = "https://github.com/sdkks/jett"
+repository = "https://github.com/sdkks/jett"
+license = "MIT"
+edition = "2024"
+rust-version = "1.88"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.6", features = ["derive"] }
+crossterm = "0.29"
+filesize = "0.2"
+jwalk = "0.9"
+nix = { version = "0.31", features = ["user"] }
+ratatui = "0.30"
+serde = { version = "1", features = ["derive"] }
+toml = "1"
+unicode-width = "0.2"
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["securitybaseapi", "debugapi"] }
+
+[dev-dependencies]
+insta = "1.49"

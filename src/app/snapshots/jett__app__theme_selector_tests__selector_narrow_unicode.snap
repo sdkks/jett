@@ -1,0 +1,25 @@
+---
+source: src/app/theme_selector_tests.rs
+assertion_line: 316
+expression: screen(&mut app)
+---
+ Total: 12.0K (3 files), freed: 0 | /synthetic    
+ Themes (live preview)   ────────────────────────┐
+                                                 │
+ No matching themes                              │
+                                                 │
+                         le                      │
+                                                 │
+                                                 │
+                         (67%)                   │
+                                                 │
+                                                 │
+                                                 │
+                         ────────────────────────┤
+                                                 │
+                         descendants)            │
+                         (33%)                   │
+                                                 │
+                         ────────────────────────┘
+ Filter: 界界界界界界界界界界界界界界界界界界界_  
+ ↑↓ preview, ↵ save, Esc cancel       DRY-RUN OFF

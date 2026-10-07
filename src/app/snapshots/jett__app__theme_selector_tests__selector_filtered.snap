@@ -1,0 +1,25 @@
+---
+source: src/app/theme_selector_tests.rs
+assertion_line: 309
+expression: screen(&mut app)
+---
+ Total: 12.0K (3 files), freed: 0 | /synthetic                                                      
+ Themes (live preview)                      ──────────────────────┬────────────────────────────────┐
+                                                                  │                                │
+ > solarized-dark                                                 │                                │
+   solarized-light                                                │                                │
+                                                                  │    folder/ (+1 descendants)    │
+                                                                  │           4.0K (33%)           │
+                                                                  │                                │
+                                                                  │                                │
+                                                                  │                                │
+                                                                  │                                │
+                                                                  │ 1 items; % of folder           │
+                                                                  │ largest  [##############] 100% │
+                                                                  │                                │
+                                                                  │                                │
+                                                                  │                                │
+                                                                  │                                │
+                                            ──────────────────────┴────────────────────────────────┘
+ Filter: solarized_                                                                                 
+ Up/Down: preview, Enter: save, Esc: cancel                                             DRY-RUN OFF

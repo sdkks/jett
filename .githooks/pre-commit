@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+# Internal tracker identifiers must never leak into public surfaces.
+# The .githooks directory is excluded: these scripts contain the pattern
+# itself by necessity.
+pattern='(EPIC|STORY|TASK|BUG)-[0-9]+'
+leaks=$(git diff --cached --unified=0 -- . ':(exclude).githooks/**' \
+  | grep -E '^\+' | grep -Ev '^\+\+\+' | grep -nE "$pattern" || true)
+if [[ -n "$leaks" ]]; then
+  printf '%s\n' 'FAIL: staged content contains internal tracker identifiers:' \
+    "$leaks" \
+    'Describe the change by its content, not by its ticket.' >&2
+  exit 1
+fi
+
+# Secret scanning when gitleaks is available; otherwise say so and continue.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --redact -v
+else
+  printf '%s\n' 'note: gitleaks not installed; skipping secret scan (see CONTRIBUTING.md)' >&2
+fi
