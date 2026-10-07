@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 ### Added
+* Add `make release` to bump, commit, and tag a release in one step (pushing stays manual)
 * Publish prebuilt binaries for Linux and macOS (x86_64 and aarch64) on every tagged release, installable with `cargo binstall jett` or as `.tar.gz` downloads from the releases page
 * Add `--dry-run` cleanup planning with unchanged confirmation and accounting, explicit dry-run prompts, an exit summary, and a sorted, deduplicated absolute-path list created by `mktemp`
 * Add `--file-list-delim newline|nul|tab|pipe` for cleanup lists; `nul` safely separates all Unix filenames

@@ -6,7 +6,7 @@ SHELL := /bin/bash
 IMAGE := docker.io/library/rust:latest
 PODMAN := podman run --rm --user 1000:1000 -v "$$PWD":/work -w /work -v jett-registry:/usr/local/cargo/registry:U $(IMAGE)
 
-.PHONY: help install-hooks install version bump-version fmt fmt-check lint test image run clean
+.PHONY: help install-hooks install version bump-version release fmt fmt-check lint test image run clean
 
 help: ## Show developer commands
 	@awk 'BEGIN {FS = ":.*## "} /^[a-z-]+:.*## / {printf "  %-14s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -24,6 +24,9 @@ version: ## Print the crate version from its manifest (host-safe, does not run t
 
 bump-version: ## Bump version and stamp CHANGELOG (BUMP=major|minor|patch or VERSION=x.y.z)
 	@bash scripts/bump-version.sh "$(BUMP)" "$(VERSION)"
+
+release: ## One-shot release: bump, commit, and tag vX.Y.Z (BUMP/VERSION as bump-version; never pushes)
+	@bash scripts/release.sh "$(BUMP)" "$(VERSION)"
 
 fmt: ## Format Rust source (inside the container)
 	@$(PODMAN) sh -c 'rustup component add rustfmt >/dev/null 2>&1; cargo fmt --all'

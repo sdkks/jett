@@ -84,8 +84,11 @@ an explicit, written justification in the Makefile comment.
   full convention.
 - Never hand-edit versions or stamp release headings: `make bump-version
   BUMP=patch|minor|major` (or `VERSION=x.y.z`) updates `Cargo.toml`,
-  refreshes `Cargo.lock` in the container, and stamps the changelog. Review
-  the diff, commit, tag `vX.Y.Z`. The script never commits or tags.
+  refreshes `Cargo.lock` in the container, and stamps the changelog — or use
+  `make release`, the one-shot form that also commits the stamped files as
+  `chore(release): release vX.Y.Z` and creates the annotated tag (it never
+  pushes and refuses to run over unrelated tracked changes). Review the
+  diff, commit, tag `vX.Y.Z`. `bump-version` itself never commits or tags.
 - Pushing the tag runs the release workflow: it uploads prebuilt
   `jett-<target>.tar.gz` assets (Linux/macOS, x86_64/aarch64) matching
   `[package.metadata.binstall]`, so `cargo binstall jett` works. Publishing

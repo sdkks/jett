@@ -29,13 +29,18 @@ same commit.** Do not batch notes for later; later never comes.
 Never hand-edit version numbers or stamp release headings yourself:
 
 ```bash
-make bump-version BUMP=patch   # or minor|major, or VERSION=x.y.z
+make bump-version BUMP=patch   # bump only, or
+make release BUMP=patch        # one-shot: bump + commit + annotated vX.Y.Z tag (never pushes)
 ```
 
 The script bumps `Cargo.toml`, refreshes `Cargo.lock` inside the standard
 Podman container, renames `[Unreleased]` to `[x.y.z] - <today>`, inserts a
 fresh `[Unreleased]` above it, and fills an empty section with a default
-"Bumped version" bullet. Review the diff, commit, then tag with
+"Bumped version" bullet. `make release` runs that same bump, then commits
+the three stamped files as `chore(release): release vX.Y.Z` and creates the
+annotated tag — it refuses to run over unrelated tracked changes, restores
+the stamped files if anything fails before the commit, and never pushes.
+With plain `make bump-version`, review the diff, commit, then tag with
 `git tag vX.Y.Z`. Never rewrite or reorder historical release sections.
 
 Two steps complete the release after tagging:
