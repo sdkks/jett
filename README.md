@@ -2,6 +2,8 @@
 
 **jettison the junk — a terminal disk space navigator and reclaimer**
 
+https://github.com/user-attachments/assets/ad53fecf-0b14-413a-b1c1-9f2edf9a090b
+
 ## How does it work?
 
 Given a path on your hard-drive (which could also be the root path, eg. `/`), `jett` scans it and indexes its metadata to memory so that you could explore its contents (even while still scanning!).
