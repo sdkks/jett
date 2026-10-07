@@ -6,6 +6,7 @@ use crate::messages::Instruction;
 pub enum Event {
     PathError,
     FileDeleted,
+    FlashNotice(String),
     AppExit,
 }
 
@@ -30,6 +31,11 @@ pub fn handle_events(event_receiver: Receiver<Event>, instruction_sender: SyncSe
                 park_timeout(time::Duration::from_millis(250));
                 let _ = instruction_sender.send(Instruction::UnflashSpaceFreed);
                 let _ = instruction_sender.send(Instruction::Render);
+            }
+            Event::FlashNotice(message) => {
+                let _ = instruction_sender.send(Instruction::ShowTransientNotice(message));
+                park_timeout(time::Duration::from_millis(2000));
+                let _ = instruction_sender.send(Instruction::ClearTransientNotice);
             }
             Event::AppExit => {
                 break;

@@ -88,6 +88,8 @@ pub fn handle_keypress_loading_mode<B: Backend>(evt: Event, app: &mut App<B>) {
 pub fn handle_keypress_normal_mode<B: Backend>(evt: Event, app: &mut App<B>) {
     match evt {
         key!(char 't') => app.open_theme_selector(),
+        key!(char 'o') => app.open_parent_of_selected(),
+        key!(char 'y') => app.yank_selected_path(),
         key!(ctrl 'c') | key!(char 'q') => {
             app.prompt_exit();
         }
@@ -177,6 +179,14 @@ pub fn handle_keypress_error_message<B: Backend>(evt: Event, app: &mut App<B>) {
         }
         _ => (),
     };
+}
+
+pub fn handle_keypress_transient_notice<B: Backend>(_evt: Event, app: &mut App<B>) {
+    // Any key dismisses the overlay early; it also clears itself after the
+    // timeout in the event thread.
+    app.reset_ui_mode();
+    // reset_ui_mode does not render on its own
+    app.render();
 }
 
 pub fn handle_keypress_screen_too_small<B: Backend>(evt: Event, app: &mut App<B>) {

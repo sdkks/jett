@@ -9,7 +9,7 @@ use crate::state::files::FileTree;
 use crate::state::tiles::Board;
 use crate::ui::bottom_line::ModeChip;
 use crate::ui::grid::{CompositionPhase, RectangleGrid};
-use crate::ui::modals::{ConfirmBox, ErrorBox, MessageBox, WarningBox};
+use crate::ui::modals::{ConfirmBox, ErrorBox, MessageBox, NoticeBox, WarningBox};
 use crate::ui::theme::Theme;
 use crate::ui::theme_selector::ThemeSelectorView;
 use crate::ui::title::TitleLine;
@@ -283,6 +283,46 @@ where
                             chunks[2],
                         );
                         f.render_widget(ErrorBox::new(message, theme), full_screen);
+                    }
+                    UiMode::TransientNotice(message) => {
+                        f.render_widget(
+                            TitleLine::new(
+                                base_path_info,
+                                current_path_info,
+                                file_tree.space_freed,
+                                theme,
+                            )
+                            .dry_run(ui_effects.dry_run)
+                            .path_error(ui_effects.current_path_is_red)
+                            .flash_space(ui_effects.flash_space_freed)
+                            .zoom_level(board.zoom_level)
+                            .read_errors(file_tree.failed_to_read),
+                            chunks[0],
+                        );
+                        f.render_widget(
+                            RectangleGrid::new(
+                                &board.tiles,
+                                board.unrenderable_tile_coordinates,
+                                board.selected_index,
+                                theme,
+                                composition_phase,
+                            ),
+                            chunks[1],
+                        );
+                        f.render_widget(
+                            BottomLine::new(theme)
+                                .deletion_mode(
+                                    ui_effects.dry_run,
+                                    ui_effects.delete_confirmation_disabled,
+                                )
+                                .notice(ui_effects.config_notice.as_deref())
+                                .currently_selected(board.currently_selected())
+                                .hide_small_files_legend(
+                                    board.unrenderable_tile_coordinates.is_none(),
+                                ),
+                            chunks[2],
+                        );
+                        f.render_widget(NoticeBox::new(message, theme), full_screen);
                     }
                     UiMode::Exiting { app_loaded } => {
                         if *app_loaded {

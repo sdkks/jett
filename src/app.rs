@@ -30,6 +30,9 @@ pub enum UiMode {
     ScreenTooSmall,
     DeleteFile(FileToDelete),
     ErrorMessage(String),
+    // Transient action feedback (copy/open); auto-dismisses via a timeout
+    // in the event thread, and any keypress dismisses it early.
+    TransientNotice(String),
     Exiting {
         app_loaded: bool,
     },
@@ -212,6 +215,18 @@ where
     pub fn reset_current_path_color(&mut self) {
         self.ui_effects.current_path_is_red = false;
     }
+    pub fn show_transient_notice(&mut self, message: String) {
+        self.ui_mode = UiMode::TransientNotice(message);
+        self.render();
+    }
+    pub fn clear_transient_notice(&mut self) {
+        // Only clear our own overlay: the user may have opened another mode
+        // (delete prompt, theme selector) while the timeout was running.
+        if matches!(self.ui_mode, UiMode::TransientNotice(_)) {
+            self.reset_ui_mode();
+            self.render();
+        }
+    }
     pub fn start_ui(&mut self) {
         self.ui_mode = UiMode::Normal;
         self.loaded = true;
@@ -319,6 +334,34 @@ where
             size: currently_selected.size,
         };
         Some(file_to_delete)
+    }
+    // `o`: open the folder CONTAINING the selected item (not the item
+    // itself) in the system file manager.
+    pub fn open_parent_of_selected(&mut self) {
+        let Some(file) = self.get_file_to_delete() else {
+            return;
+        };
+        let full_path = file.full_path();
+        let Some(parent) = full_path.parent() else {
+            return;
+        };
+        let message = match crate::os::desktop::open_folder(parent) {
+            Ok(()) => format!("Opening {}", parent.display()),
+            Err(err) => err,
+        };
+        let _ = self.event_sender.try_send(Event::FlashNotice(message));
+    }
+    // `y`: copy the absolute path of the selected item to the clipboard.
+    pub fn yank_selected_path(&mut self) {
+        let Some(file) = self.get_file_to_delete() else {
+            return;
+        };
+        let full_path = file.full_path();
+        let message = match crate::os::desktop::copy_to_clipboard(&full_path.to_string_lossy()) {
+            Ok(()) => format!("Copied path: {}", full_path.display()),
+            Err(err) => format!("Copy failed: {err}"),
+        };
+        let _ = self.event_sender.try_send(Event::FlashNotice(message));
     }
     pub fn prompt_file_deletion(&mut self) {
         if let Some(file_to_delete) = self.get_file_to_delete() {

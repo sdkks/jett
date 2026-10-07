@@ -417,7 +417,7 @@ fn config_notice_is_non_modal_and_visible_during_scanning_and_navigation() {
             if width == 50 {
                 text_cell(buffer, "navigate");
             } else {
-                text_cell(buffer, "<arrows> - move around");
+                text_cell(buffer, "<arrows> - move,");
                 text_cell(buffer, "bad config accent");
             }
         }

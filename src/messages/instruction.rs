@@ -8,7 +8,8 @@ use crossterm::event::Event as BackEvent;
 use crate::input::{
     handle_keypress_delete_file_mode, handle_keypress_error_message, handle_keypress_exiting_mode,
     handle_keypress_loading_mode, handle_keypress_normal_mode, handle_keypress_screen_too_small,
-    handle_keypress_theme_selector, handle_keypress_warning_message,
+    handle_keypress_theme_selector, handle_keypress_transient_notice,
+    handle_keypress_warning_message,
 };
 use crate::{App, UiMode};
 
@@ -23,6 +24,8 @@ pub enum Instruction {
     RenderAndUpdateBoard,
     Render,
     ResetUiMode,
+    ShowTransientNotice(String),
+    ClearTransientNotice,
     Keypress(BackEvent),
     IncrementFailedToRead,
 }
@@ -66,6 +69,12 @@ where
             Instruction::ResetUiMode => {
                 app.reset_ui_mode();
             }
+            Instruction::ShowTransientNotice(message) => {
+                app.show_transient_notice(message);
+            }
+            Instruction::ClearTransientNotice => {
+                app.clear_transient_notice();
+            }
             Instruction::Keypress(evt) => {
                 match &app.ui_mode {
                     UiMode::Loading => {
@@ -84,6 +93,9 @@ where
                     }
                     UiMode::ErrorMessage(_) => {
                         handle_keypress_error_message(evt, app);
+                    }
+                    UiMode::TransientNotice(_) => {
+                        handle_keypress_transient_notice(evt, app);
                     }
                     UiMode::Exiting { app_loaded: _ } => {
                         handle_keypress_exiting_mode(evt, app);

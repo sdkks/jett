@@ -1,6 +1,6 @@
 ---
 source: src/tests/cases/ui.rs
-expression: "&terminal_draw_events_mirror[7]"
+expression: "&terminal_draw_events_mirror[6]"
 ---
                                                                                                                                                                                               
                                                                                                                                                                                               
@@ -51,5 +51,4 @@ expression: "&terminal_draw_events_mirror[7]"
                                                                                                                                                                                               
                                                                                                                                                                                               
                                                                                                                                                                                               
-                                                                                                                            t    themes, <q> - quit                                           
-
+                                                                                                                                     t    themes, <q> - quit

@@ -70,6 +70,11 @@ and light schemes are explicit choices; jett does not detect your terminal's the
 Use the arrow keys (or `h`/`j`/`k`/`l`) to move, Enter to enter a folder, Esc to
 visit its parent, `+`/`-`/`0` to zoom in/out/reset, Backspace to request deletion,
 and `q` to quit. Deletion requires confirmation unless explicitly disabled.
+Press `o` to open the folder containing the selected item in your system's file
+manager (Finder, your Linux desktop's file manager, or Explorer), and `y` to copy
+the selected item's absolute path to the clipboard (`pbcopy`, `wl-copy`, `xclip`,
+`xsel`, or `clip`). On machines without a clipboard tool, `y` reports what is
+missing instead of copying.
 After scanning finishes, press `t` to open the full-screen theme selector.
 
 Type to filter built-in and custom scheme names; Up/Down previews the highlighted

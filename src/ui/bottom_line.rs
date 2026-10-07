@@ -83,14 +83,14 @@ fn render_controls_legend(
     let (mut long_controls_line, mut short_controls_line) = if hide_delete {
         (
             String::from(
-                "<arrows> - move around, <ENTER> - enter folder, <ESC> - parent folder, <+/-/0> - zoom in/out/reset, <q> - quit",
+                "<arrows> - move, <ENTER> - enter folder, <ESC> - parent, <o> - open folder, <y> - copy path, <+/-/0> - zoom, <q> - quit",
             ),
             String::from("←↓↑→/<ENTER>/<ESC>: navigate"),
         )
     } else {
         (
             String::from(
-                "<arrows> - move around, <ENTER> - enter folder, <ESC> - parent folder, <BACKSPACE> - delete, <+/-/0> - zoom in/out/reset, <q> - quit",
+                "<arrows> - move, <ENTER> - enter folder, <ESC> - parent, <BACKSPACE> - delete, <o> - open folder, <y> - copy path, <+/-/0> - zoom, <q> - quit",
             ),
             String::from("←↓↑→/<ENTER>/<ESC>: navigate, <BACKSPACE>: del"),
         )

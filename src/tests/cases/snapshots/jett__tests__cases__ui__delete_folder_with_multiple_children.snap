@@ -51,4 +51,4 @@ expression: "&terminal_draw_events_mirror[0]"
 │                                                                                                                                        │                                                   │
 └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────┘
                                                                                                                                                                                               
- <arrows> - move around, <ENTER> - enter folder, <ESC> - parent folder, <BACKSPACE> - delete, <+/-/0> - zoom in/out/reset, <t> - themes, <q> - quit                               DRY-RUN OFF
+ <arrows> - move, <ENTER> - enter folder, <ESC> - parent, <BACKSPACE> - delete, <o> - open folder, <y> - copy path, <+/-/0> - zoom, <t> - themes, <q> - quit                      DRY-RUN OFF
