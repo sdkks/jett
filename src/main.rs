@@ -65,6 +65,9 @@ pub struct Opt {
     #[arg(short, long)]
     /// Don't ask for confirmation before deleting
     disable_delete_confirmation: bool,
+    /// Stay on one filesystem: mounted directories are listed but not scanned (like du -x; Unix only)
+    #[arg(short = 'x', long)]
+    one_file_system: bool,
     /// Plan confirmed deletions without removing files; show hypothetical freed space
     #[arg(long)]
     dry_run: bool,
@@ -168,6 +171,7 @@ fn try_main() -> Result<(), anyhow::Error> {
                 opts.apparent_size,
                 opts.disable_delete_confirmation,
                 opts.dry_run,
+                opts.one_file_system,
                 selection,
             )
         }
@@ -201,10 +205,36 @@ pub fn start<B>(
         show_apparent_size,
         disable_delete_confirmation,
         false,
+        false,
         config::select_theme(None, Ok(config::Config::default())).expect("default selection"),
     );
 }
 
+// Same entry point as start(), but with --one-file-system enabled, for
+// exercising the same-device scan path in the snapshot suite.
+#[cfg(test)]
+pub fn start_one_file_system<B>(
+    terminal_backend: B,
+    terminal_events: Box<dyn Iterator<Item = BackEvent> + Send>,
+    path: PathBuf,
+    show_apparent_size: bool,
+    disable_delete_confirmation: bool,
+) where
+    B: Backend + Send + 'static,
+{
+    start_with_theme(
+        terminal_backend,
+        terminal_events,
+        path,
+        show_apparent_size,
+        disable_delete_confirmation,
+        false,
+        true,
+        config::select_theme(None, Ok(config::Config::default())).expect("default selection"),
+    );
+}
+
+#[allow(clippy::too_many_arguments)] // flag plumbing; a config struct would churn every call site
 fn start_with_theme<B>(
     terminal_backend: B,
     terminal_events: Box<dyn Iterator<Item = BackEvent> + Send>,
@@ -212,6 +242,7 @@ fn start_with_theme<B>(
     show_apparent_size: bool,
     disable_delete_confirmation: bool,
     dry_run: bool,
+    one_file_system: bool,
     selection: config::ThemeSelection,
 ) -> Option<DryRunPlan>
 where
@@ -291,6 +322,19 @@ where
             .unwrap(),
     );
 
+    // Device id of the scan root for --one-file-system (du -x): directories
+    // on a different device stay in the listing but their contents are never
+    // read. There is no std equivalent on Windows, where the flag is a no-op.
+    #[cfg(unix)]
+    let root_device: Option<u64> = if one_file_system {
+        use ::std::os::unix::fs::MetadataExt;
+        std::fs::metadata(&path).ok().map(|metadata| metadata.dev())
+    } else {
+        None
+    };
+    #[cfg(not(unix))]
+    let _ = one_file_system;
+
     active_threads.push(
         thread::Builder::new()
             .name("hd_scanner".to_string())
@@ -299,7 +343,7 @@ where
                 let instruction_sender = instruction_sender.clone();
                 let loaded = loaded.clone();
                 move || {
-                    'scanning: for entry in WalkDir::new(&path)
+                    let walk_dir = WalkDir::new(&path)
                         .parallelism(if SHOULD_SCAN_HD_FILES_IN_MULTIPLE_THREADS {
                             RayonDefaultPool {
                                 busy_timeout: time::Duration::from_secs(1),
@@ -308,9 +352,33 @@ where
                             Serial
                         })
                         .skip_hidden(false)
-                        .follow_links(false)
-                        .into_iter()
-                    {
+                        .follow_links(false);
+                    // du -x: keep foreign-device directories as (tiny) tiles
+                    // but never descend into them.
+                    #[cfg(unix)]
+                    let walk_dir = match root_device {
+                        Some(root_device) => walk_dir.process_read_dir(
+                            move |_depth, dir_path, _read_dir_state, children| {
+                                use ::std::os::unix::fs::MetadataExt;
+                                for child in children.iter_mut() {
+                                    let Ok(dir_entry) = child else {
+                                        continue;
+                                    };
+                                    if !dir_entry.file_type().is_dir() {
+                                        continue;
+                                    }
+                                    let child_path = dir_path.join(&dir_entry.file_name);
+                                    if let Ok(metadata) = std::fs::metadata(&child_path)
+                                        && metadata.dev() != root_device
+                                    {
+                                        dir_entry.read_children = None;
+                                    }
+                                }
+                            },
+                        ),
+                        None => walk_dir,
+                    };
+                    'scanning: for entry in walk_dir.into_iter() {
                         let instruction_sent = match entry {
                             Ok(entry) => match entry.metadata() {
                                 Ok(file_metadata) => {

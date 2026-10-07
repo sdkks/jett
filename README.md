@@ -59,6 +59,11 @@ Either start `jett` in the folder you want to scan, or provide it with the folde
 $ jett /home/user
 ```
 
+Add `-x`/`--one-file-system` to stay on a single filesystem, like `du -x`:
+directories mounted from another device still appear as tiles, but their
+contents are not scanned or counted. Symlinks are never followed either way.
+(Unix only; the flag is a no-op on Windows.)
+
 Choose a color scheme with `--theme <name>` (for example, `--theme catppuccin-mocha`
 or `--theme solarized-light`). Run `jett --help` for the complete list of 19 built-in
 schemes plus `default`. Custom scheme names from your config are also accepted.

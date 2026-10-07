@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * Add static musl builds for Linux (x86_64 and aarch64) so prebuilt binaries run on systems regardless of their glibc version, such as NAS firmware and older distributions
 * Add `make release` to bump, commit, and tag a release in one step (pushing stays manual)
 * Publish prebuilt binaries for Linux and macOS (x86_64 and aarch64) on every tagged release, installable with `cargo binstall jett` or as `.tar.gz` downloads from the releases page
+* Add `-x`/`--one-file-system` to keep the scan on one filesystem like `du -x`: mounted directories appear as tiles but their contents are not scanned or counted (Unix; no-op on Windows)
 * Press `o` to open the selected item's containing folder in the system file manager (`xdg-open`, `open`, or `explorer`)
 * Press `y` in the navigator to copy the selected item's absolute path to the clipboard via `pbcopy`, `wl-copy`, `xclip`, `xsel`, or `clip`, with a transient overlay reporting the outcome
 * Add `--dry-run` cleanup planning with unchanged confirmation and accounting, explicit dry-run prompts, an exit summary, and a sorted, deduplicated absolute-path list created by `mktemp`

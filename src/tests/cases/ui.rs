@@ -8,10 +8,10 @@ use ::insta::assert_snapshot;
 use crossterm::event::KeyModifiers;
 use crossterm::event::{Event, KeyCode, KeyEvent};
 
-use crate::start;
 use crate::tests::cases::test_utils::*;
 use crate::tests::fakes::TerminalEvent::*;
 use crate::tests::fakes::TerminalEvents;
+use crate::{start, start_one_file_system};
 
 macro_rules! key {
     (char $x:expr) => {
@@ -2708,6 +2708,49 @@ fn empty_folder() {
     );
 
     assert_eq!(terminal_draw_events_mirror.len(), 2);
+    assert_snapshot!(&terminal_draw_events_mirror[0]);
+    assert_snapshot!(&terminal_draw_events_mirror[1]);
+}
+#[test]
+fn one_file_system_still_scans_same_device_content() {
+    let (terminal_events, terminal_draw_events, backend) = test_backend_factory(190, 50);
+    let keyboard_events = sleep_and_quit_events(1, true);
+    let temp_dir_path = create_root_temp_dir("one_file_system").expect("failed to create temp dir");
+
+    let mut subfolder_path = PathBuf::from(&temp_dir_path);
+    subfolder_path.push("inner");
+    create_dir(&subfolder_path).expect("failed to create temp dir");
+    let mut file_path = subfolder_path.clone();
+    file_path.push("file1");
+    create_temp_file(file_path, 8192).expect("failed to create temp file");
+
+    start_one_file_system(
+        backend,
+        keyboard_events,
+        temp_dir_path.clone(),
+        SHOW_APPARENT_SIZE,
+        DELETE_CONFIRMATION_ENABLED,
+    );
+    std::fs::remove_dir_all(temp_dir_path).expect("failed to remove temporary folder");
+    let terminal_draw_events_mirror = terminal_draw_events.lock().unwrap();
+    let expected_terminal_events = vec![
+        Clear, HideCursor, Draw, HideCursor, Flush, Draw, HideCursor, Flush, Clear, ShowCursor,
+    ];
+    assert_eq!(
+        &terminal_events.lock().unwrap()[..],
+        &expected_terminal_events[..]
+    );
+
+    assert_eq!(terminal_draw_events_mirror.len(), 2);
+    // The --one-file-system filter must not interfere with same-device
+    // content: the nested folder is still scanned and rendered. Each draw
+    // mirror only contains cells changed since the previous draw, so check
+    // every mirror.
+    assert!(
+        terminal_draw_events_mirror
+            .iter()
+            .any(|mirror| mirror.contains("inner"))
+    );
     assert_snapshot!(&terminal_draw_events_mirror[0]);
     assert_snapshot!(&terminal_draw_events_mirror[1]);
 }
