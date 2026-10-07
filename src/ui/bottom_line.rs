@@ -95,6 +95,9 @@ fn render_controls_legend(
             String::from("←↓↑→/<ENTER>/<ESC>: navigate, <BACKSPACE>: del"),
         )
     };
+    if max_len >= short_controls_line.chars().count() as u16 + 22 {
+        short_controls_line.push_str(", <o>: open, <y>: copy");
+    }
     if show_themes {
         long_controls_line = long_controls_line.replace("<q> - quit", "<t> - themes, <q> - quit");
         if max_len >= short_controls_line.chars().count() as u16 + 13 {

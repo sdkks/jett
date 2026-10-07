@@ -51,4 +51,4 @@ expression: "&terminal_draw_events_mirror[0]"
 │                                                                                        │
 └────────────────────────────────────────────────────────────────────────────────────────┘
                                                                                           
- ←↓↑→/<ENTER>/<ESC>: navigate, <BACKSPACE>: del, <t>: themes                  DRY-RUN OFF
+ ←↓↑→/<ENTER>/<ESC>: navigate, <BACKSPACE>: del, <o>: open, <y>: copy         DRY-RUN OFF
